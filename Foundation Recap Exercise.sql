@@ -5,11 +5,24 @@ Use the table PatientStay.
 This lists 44 patients admitted to London hospitals over 5 days between Feb 26th and March 2nd 2024
 */
 
-SELECT
-	*
-FROM
-	PatientStay ps ;
+SELECT ps.PatientId, ps.AdmittedDate, ps.DischargeDate, ps.Hospital, ps.Ward,
+DATEDIFF(day,ps.AdmittedDate,ps.DischargeDate) +1 as Length_Of_Stay
+--,MONTH(AdmittedDate) as AdmMonth
+--, DATEPART(month,AdmittedDate)as Admmonth
 
+FROM
+	PatientStay ps
+where ps.Hospital in ('Oxleas', 'PRUH')
+	and ps.AdmittedDate between '2024-02-01' and '2024-02-29'
+	and ps.ward like '%surgery%'
+	order by AdmittedDate desc, PatientId desc
+	--and month(AdmittedDate) =2
+	--and YEAR(AdmittedDate) = 2024
+
+--Test date functions
+--SELECT month('2024-02-13') AS mymonth;
+--SELECT datename(mm,'2024-02-13');
+--SELECT LEFT(DATENAME(MONTH, '2024-02-13'), 3) + '-' + right(YEAR('2024-02-13'), 2) AS Month_Year;
 /*
 1. List the patients -
 a) in the Oxleas or PRUH hospitals and
